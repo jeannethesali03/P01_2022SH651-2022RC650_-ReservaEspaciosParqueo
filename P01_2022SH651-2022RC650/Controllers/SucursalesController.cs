@@ -118,7 +118,15 @@ namespace P01_2022SH651_2022RC650.Controllers
                 return NotFound();
             }
 
-            _parqueoContext.Sucursales.Attach(sucursal);
+            // Verificar si hay espacios asociados a la sucursal
+            var espaciosAsociados = _parqueoContext.Espacios_Parqueo
+                .Any(e => e.Id_Sucursal == id);
+
+            if (espaciosAsociados)
+            {
+                return BadRequest("No se puede borrar esta sucursal porque tiene espacios, tienes que borrar esos espacios primero.");
+            }
+
             _parqueoContext.Sucursales.Remove(sucursal);
             _parqueoContext.SaveChanges();
 
