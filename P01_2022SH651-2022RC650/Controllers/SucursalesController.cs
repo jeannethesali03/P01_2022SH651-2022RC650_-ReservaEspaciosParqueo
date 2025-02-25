@@ -13,12 +13,48 @@ namespace P01_2022SH651_2022RC650.Controllers
     public class SucursalesController : ControllerBase
     {
         private readonly ParqueoContext _parqueoContext;
+        public SucursalesController(ParqueoContext parqueoContexto)
+        {
+            _parqueoContext = parqueoContexto;
+        }
 
         [HttpGet]
         [Route("GetAll")]
         public IActionResult Get()
         {
-            List<Sucursales> listadoSucursales = (from Sucursales in _parqueoContext.Sucursales select Sucursales).ToList();
+            var listadoSucursales = (from s in _parqueoContext.Sucursales select new { 
+                s.Nombre,
+                s.Direccion,
+                s.Telefono,
+                s.Numero_Espacios,
+                Administradores = (from u in _parqueoContext.Usuarios where s.Id_Usuario == u.Id_Usuario select new {u.Nombre, u.Correo, u.Rol}).ToList(),
+                Espacios = (from e in _parqueoContext.Espacios_Parqueo where s.Id_Sucursal == e.Id_Sucursal select new { e.Numero_Espacio, e.Ubicacion, e.Costo_Por_Hora }).ToList()
+
+            }).ToList();
+
+            if (listadoSucursales.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(listadoSucursales);
+        }
+
+        [HttpGet]
+        [Route("GetById{id}")]
+        public IActionResult Get(int id)
+        {
+            var listadoSucursales = (from s in _parqueoContext.Sucursales
+                                     where s.Id_Sucursal == id
+                                     select new
+                                     {
+                                         s.Nombre,
+                                         s.Direccion,
+                                         s.Telefono,
+                                         s.Numero_Espacios,
+                                         Administradores = (from u in _parqueoContext.Usuarios select new { u.Nombre, u.Correo, u.Rol }),
+                                         Espacios = (from e in _parqueoContext.Espacios_Parqueo select new { e.Numero_Espacio, e.Ubicacion, e.Costo_Por_Hora })
+                                     }).ToList();
 
             if (listadoSucursales.Count == 0)
             {

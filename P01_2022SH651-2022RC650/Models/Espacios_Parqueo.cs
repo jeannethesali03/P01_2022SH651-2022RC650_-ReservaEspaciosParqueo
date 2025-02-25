@@ -13,6 +13,5 @@ namespace P01_2022SH651_2022RC650.Models
         public string Numero_Espacio { get; set; }
         public string Ubicacion { get; set; }
         public decimal Costo_Por_Hora { get; set; }
-        public string Estado { get; set; }
     }
 }
