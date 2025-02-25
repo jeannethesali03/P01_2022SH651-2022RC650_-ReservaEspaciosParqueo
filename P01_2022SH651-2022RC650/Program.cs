@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using P01_2022SH651_2022RC650.Models;
 
+//Eyleen Jeannethe Salinas Hernández
+//Wilber Anibal Rivas Carranza
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
