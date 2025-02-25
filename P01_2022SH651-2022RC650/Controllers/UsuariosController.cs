@@ -47,6 +47,18 @@ namespace P01_2022SH651_2022RC650.Controllers
             return Ok(usuario);
         }
 
+        [HttpGet]
+        [Route("InicioSesion")]
+        public IActionResult InicioSesion(string correo, string contrasena)
+        {
+            var usuario = _parqueoContext.Usuarios.FirstOrDefault(u => u.Correo == correo && u.Contrasena == contrasena);
+
+            if (usuario == null)
+            {
+                return NotFound("Correo o contraseña incorrecta");
+            }
+            return Ok("Inicio de sesión exitoso");
+        }
 
 
         [HttpPost]
